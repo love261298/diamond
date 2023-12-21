@@ -207,58 +207,11 @@ export class AppConfigComponent implements OnInit {
             ...config,
             colorScheme,
         }));
-        // const themeLink = <HTMLLinkElement>(
-        //     document.getElementById('theme-link')
-        // );
-        // const themeLinkHref = themeLink.getAttribute('href');
-        // const currentColorScheme =
-        //     'theme-' + this.layoutService.config().colorScheme;
-        // const newColorScheme = 'theme-' + colorScheme;
-        // const newHref = themeLinkHref!.replace(
-        //     currentColorScheme,
-        //     newColorScheme
-        // );
-
-        // this.replaceThemeLink(newHref, 'theme-link', () => {
-        //     this.layoutService.config().colorScheme = colorScheme;
-        //     this.layoutService.onConfigUpdate();
-        // });
     }
 
     changeComponentTheme(theme: string) {
         this.layoutService.config.update((config) => ({ ...config, theme }));
-        // const themeLink = <HTMLLinkElement>(
-        //     document.getElementById('theme-link')
-        // );
-        // const newHref = themeLink
-        //     .getAttribute('href')!
-        //     .replace(this.layoutService.config().theme, theme);
-
-        // this.replaceThemeLink(newHref, 'theme-link', () => {
-        //     this.layoutService.config().theme = theme;
-        //     this.layoutService.onConfigUpdate();
-        // });
     }
-
-    // replaceThemeLink(href: string, targetId: string, onComplete?: Function) {
-    //     const id = targetId;
-    //     const targetLink = <HTMLLinkElement>document.getElementById(id);
-    //     const cloneLinkElement = <HTMLLinkElement>targetLink.cloneNode(true);
-
-    //     cloneLinkElement.setAttribute('href', href);
-    //     cloneLinkElement.setAttribute('id', id + '-clone');
-
-    //     targetLink.parentNode!.insertBefore(
-    //         cloneLinkElement,
-    //         targetLink.nextSibling
-    //     );
-
-    //     cloneLinkElement.addEventListener('load', () => {
-    //         targetLink.remove();
-    //         cloneLinkElement.setAttribute('id', id);
-    //         onComplete && onComplete();
-    //     });
-    // }
 
     changeMenuTheme(theme: any) {
         this.layoutService.config.update((config) => ({
