@@ -4,16 +4,14 @@ import { AppSidebarComponent } from './app.sidebar.component';
 
 @Component({
     selector: 'app-topbar',
-    templateUrl: './app.topbar.component.html'
+    templateUrl: './app.topbar.component.html',
 })
 export class AppTopbarComponent {
-
     @ViewChild('menubutton') menuButton!: ElementRef;
 
     @ViewChild(AppSidebarComponent) appSidebar!: AppSidebarComponent;
 
-    constructor(public layoutService: LayoutService, public el: ElementRef) { }
-
+    constructor(public layoutService: LayoutService, public el: ElementRef) {}
 
     onMenuButtonClick() {
         this.layoutService.onMenuToggle();
@@ -32,8 +30,11 @@ export class AppTopbarComponent {
     }
 
     get logo() {
-        const logo = this.layoutService.config.menuTheme === 'white' || this.layoutService.config.menuTheme === 'orange' ? 'dark' : 'white';
+        const logo =
+            this.layoutService.config().menuTheme === 'white' ||
+            this.layoutService.config().menuTheme === 'orange'
+                ? 'dark'
+                : 'white';
         return logo;
     }
-
 }

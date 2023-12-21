@@ -1,16 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, debounceTime } from 'rxjs';
 import { Product } from 'src/app/demo/api/product';
-import { AppConfig, LayoutService } from 'src/app/layout/service/app.layout.service';
+import {
+    AppConfig,
+    LayoutService,
+} from 'src/app/layout/service/app.layout.service';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
 
 @Component({
-    templateUrl: './ecommerce.dashboard.component.html'
+    templateUrl: './ecommerce.dashboard.component.html',
 })
 export class EcommerceDashboardComponent implements OnInit, OnDestroy {
-
     products: Product[] = [];
 
     productsThisWeek: Product[] = [];
@@ -33,7 +35,7 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
 
     cols: any[] = [];
 
-    config!: AppConfig;
+    config: AppConfig = this.layoutService.config();
 
     orderWeek: any[] = [];
 
@@ -42,28 +44,34 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
     teamMembers: any[] = [];
 
     selectedOrderWeek!: any;
-        
-    constructor(private productService: ProductService, private layoutService: LayoutService) {
-        this.subscription = this.layoutService.configUpdate$.subscribe(config => {
-            this.config = config;
-            this.initCharts();
-        });
+
+    constructor(
+        private productService: ProductService,
+        private layoutService: LayoutService
+    ) {
+        this.subscription = this.layoutService.configUpdate$
+            .pipe(debounceTime(25))
+            .subscribe((config) => {
+                this.initCharts();
+            });
     }
 
     ngOnInit(): void {
-        this.productService.getProducts().then(data => {
+        this.productService.getProducts().then((data) => {
             this.products = data;
             this.productsThisWeek = data;
-            this.productsBestSellers = data.slice(0,7);
+            this.productsBestSellers = data.slice(0, 7);
         });
 
-        this.productService.getProductsMixed().then(data => this.productsLastWeek = data);
+        this.productService
+            .getProductsMixed()
+            .then((data) => (this.productsLastWeek = data));
 
         this.cols = [
-            {field: 'vin', header: 'Vin'},
-            {field: 'year', header: 'Year'},
-            {field: 'brand', header: 'Brand'},
-            {field: 'color', header: 'Color'}
+            { field: 'vin', header: 'Vin' },
+            { field: 'year', header: 'Year' },
+            { field: 'brand', header: 'Brand' },
+            { field: 'color', header: 'Color' },
         ];
 
         this.items = [
@@ -72,14 +80,14 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                 items: [
                     { label: 'Tracker', icon: 'pi pi-compass' },
                     { label: 'Map', icon: 'pi pi-map-marker' },
-                    { label: 'Manage', icon: 'pi pi-pencil' }
-                ]
-            }
+                    { label: 'Manage', icon: 'pi pi-pencil' },
+                ],
+            },
         ];
 
         this.orderWeek = [
-            {name: 'This Week', code: '0'},
-            {name: 'Last Week', code: '1'}
+            { name: 'This Week', code: '0' },
+            { name: 'Last Week', code: '1' },
         ];
 
         this.metrics = [
@@ -89,9 +97,9 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                 color_light: '#64B5F6',
                 color_dark: '#1976D2',
                 textContent: [
-                    {amount: '640', text: 'Pending'},
-                    {amount: '1420', text: 'Completed'}
-                ]
+                    { amount: '640', text: 'Pending' },
+                    { amount: '1420', text: 'Completed' },
+                ],
             },
             {
                 title: 'Revenue',
@@ -99,9 +107,9 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                 color_light: '#7986CB',
                 color_dark: '#303F9F',
                 textContent: [
-                    {amount: '$2,100', text: 'Expenses'},
-                    {amount: '$9,640', text: 'Income'}
-                ]
+                    { amount: '$2,100', text: 'Expenses' },
+                    { amount: '$9,640', text: 'Income' },
+                ],
             },
             {
                 title: 'Customers',
@@ -109,9 +117,9 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                 color_light: '#4DB6AC',
                 color_dark: '#00796B',
                 textContent: [
-                    {amount: 8272, text: 'Active'},
-                    {amount: 25402, text: 'Registered'}
-                ]
+                    { amount: 8272, text: 'Active' },
+                    { amount: 25402, text: 'Registered' },
+                ],
             },
             {
                 title: 'Comments',
@@ -119,38 +127,38 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                 color_light: '#4DD0E1',
                 color_dark: '#0097A7',
                 textContent: [
-                    {amount: 12, text: 'New'},
-                    {amount: 85, text: 'Responded'}
-                ]
-            }
+                    { amount: 12, text: 'New' },
+                    { amount: 85, text: 'Responded' },
+                ],
+            },
         ];
 
         this.teamMembers = [
             {
                 name: 'Amy Elsner',
                 desc: 'Accounting',
-                image: 'amyelsner'
+                image: 'amyelsner',
             },
             {
                 name: 'Anna Fali',
                 desc: 'Procurement',
-                image: 'annafali'
+                image: 'annafali',
             },
             {
                 name: 'Bernardo Dominic',
                 desc: 'Finance',
-                image: 'bernardodominic'
+                image: 'bernardodominic',
             },
             {
                 name: 'Ivan Magalhaes',
                 desc: 'Sales',
-                image: 'ivanmagalhaes'
+                image: 'ivanmagalhaes',
             },
             {
                 name: 'Xuxue Feng',
                 desc: 'Management',
-                image: 'xuxuefeng'
-            }
+                image: 'xuxuefeng',
+            },
         ];
 
         this.initCharts();
@@ -159,23 +167,32 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
     initCharts() {
         const documentStyle = getComputedStyle(document.documentElement);
         const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+        const textColorSecondary = documentStyle.getPropertyValue(
+            '--text-color-secondary'
+        );
+        const surfaceBorder =
+            documentStyle.getPropertyValue('--surface-border');
         this.ordersChart = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [{
-                label: 'New',
-                data: [2, 7, 20, 9, 16, 9, 5],
-                backgroundColor: [
-                    'rgba(100, 181, 246, 0.2)',
-                ],
-                borderColor: [
-                    '#64B5F6',
-                ],
-                borderWidth: 3,
-                fill: true,
-                tension: .4
-            }]
+            labels: [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+            ],
+            datasets: [
+                {
+                    label: 'New',
+                    data: [2, 7, 20, 9, 16, 9, 5],
+                    backgroundColor: ['rgba(100, 181, 246, 0.2)'],
+                    borderColor: ['#64B5F6'],
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                },
+            ],
         };
 
         this.ordersChartOptions = {
@@ -183,44 +200,46 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                 legend: {
                     display: true,
                     labels: {
-                        color: textColor
-                    }
-                }
+                        color: textColor,
+                    },
+                },
             },
             hover: {
-                mode: 'index'
+                mode: 'index',
             },
             scales: {
-                x:{
+                x: {
                     ticks: {
-                        color: textColorSecondary
+                        color: textColorSecondary,
                     },
                     grid: {
-                        color:[surfaceBorder],
-                        drawBorder: false
-                    }
+                        color: [surfaceBorder],
+                        drawBorder: false,
+                    },
                 },
                 y: {
                     ticks: {
                         color: textColorSecondary,
                         min: 0,
-                        max: 20
+                        max: 20,
                     },
                     grid: {
-                        color:[surfaceBorder],
-                        drawBorder: false
-                    }
-                }
-            }
+                        color: [surfaceBorder],
+                        drawBorder: false,
+                    },
+                },
+            },
         };
 
         this.revenueChart = {
             labels: ['Direct', 'Promoted', 'Affiliate'],
-            datasets: [{
-                data: [40, 35, 25],
-                backgroundColor: ['#64B5F6', '#7986CB', '#4DB6AC'],
-                borderColor: [surfaceBorder]
-            }]
+            datasets: [
+                {
+                    data: [40, 35, 25],
+                    backgroundColor: ['#64B5F6', '#7986CB', '#4DB6AC'],
+                    borderColor: [surfaceBorder],
+                },
+            ],
         };
 
         this.revenueChartOptions = {
@@ -228,16 +247,18 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                 legend: {
                     display: true,
                     labels: {
-                        color: textColor
-                    }
-                }
-            }
-        }
-
+                        color: textColor,
+                    },
+                },
+            },
+        };
     }
-    
+
     onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+        table.filterGlobal(
+            (event.target as HTMLInputElement).value,
+            'contains'
+        );
     }
 
     changeDataset(event: any) {
@@ -245,14 +266,17 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
             [2, 7, 20, 9, 16, 9, 5],
             [2, 4, 9, 20, 16, 12, 20],
             [2, 17, 7, 15, 4, 20, 8],
-            [2, 2, 20, 4, 17, 16, 20]
+            [2, 2, 20, 4, 17, 16, 20],
         ];
 
-        this.ordersChart.datasets[0].data = dataSet[parseInt(event.currentTarget.getAttribute('data-index'))];
-        this.ordersChart.datasets[0].label = event.currentTarget.getAttribute('data-label');
-        this.ordersChart.datasets[0].borderColor = event.currentTarget.getAttribute('data-stroke');
-        this.ordersChart.datasets[0].backgroundColor = event.currentTarget.getAttribute('data-fill');
-
+        this.ordersChart.datasets[0].data =
+            dataSet[parseInt(event.currentTarget.getAttribute('data-index'))];
+        this.ordersChart.datasets[0].label =
+            event.currentTarget.getAttribute('data-label');
+        this.ordersChart.datasets[0].borderColor =
+            event.currentTarget.getAttribute('data-stroke');
+        this.ordersChart.datasets[0].backgroundColor =
+            event.currentTarget.getAttribute('data-fill');
     }
 
     recentSales(event: any) {
@@ -264,11 +288,8 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
     }
 
     updateChartOptions() {
-        if (this.config.colorScheme === 'dark')
-            this.applyDarkTheme();
-        else
-            this.applyLightTheme();
-
+        if (this.config.colorScheme === 'dark') this.applyDarkTheme();
+        else this.applyLightTheme();
     }
 
     applyDarkTheme() {
@@ -276,58 +297,58 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
             plugins: {
                 legend: {
                     labels: {
-                        color: '#ebedef'
-                    }
-                }
+                        color: '#ebedef',
+                    },
+                },
             },
             scales: {
                 x: {
                     ticks: {
-                        color: '#ebedef'
+                        color: '#ebedef',
                     },
                     grid: {
-                        color:  'rgba(160, 167, 181, .3)',
-                    }
+                        color: 'rgba(160, 167, 181, .3)',
+                    },
                 },
                 y: {
                     ticks: {
-                        color: '#ebedef'
+                        color: '#ebedef',
                     },
                     grid: {
-                        color:  'rgba(160, 167, 181, .3)',
-                    }
+                        color: 'rgba(160, 167, 181, .3)',
+                    },
                 },
-            }
+            },
         };
     }
 
     applyLightTheme() {
-            this.ordersChartOptions = {
+        this.ordersChartOptions = {
             plugins: {
                 legend: {
                     labels: {
-                        color: '#495057'
-                    }
-                }
+                        color: '#495057',
+                    },
+                },
             },
             scales: {
                 x: {
                     ticks: {
-                        color: '#495057'
+                        color: '#495057',
                     },
                     grid: {
-                        color:  '#ebedef',
-                    }
+                        color: '#ebedef',
+                    },
                 },
                 y: {
                     ticks: {
-                        color: '#495057'
+                        color: '#495057',
                     },
                     grid: {
-                        color:  '#ebedef',
-                    }
+                        color: '#ebedef',
+                    },
                 },
-            }
+            },
         };
     }
 
