@@ -28,12 +28,12 @@ export class LoginComponent implements OnInit {
     });
   }
   onSubmit(): void {
-    if (this.loginForm.valid) {
+    if (!this.loginForm.valid) {
       return;
     }
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        console.log('Login successful', response);
+        console.log(response.message);
         this.authService.setToken(response.token);
         this.authService.setRole(response.role);
         this.router.navigate(['/'])
