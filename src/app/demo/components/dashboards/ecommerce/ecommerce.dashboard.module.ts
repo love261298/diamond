@@ -20,7 +20,7 @@ import { MenuModule } from 'primeng/menu';
 		FormsModule,
 		TableModule,
 		ChartModule,
-        MenuModule
+		MenuModule
 	],
 	declarations: [EcommerceDashboardComponent]
 })

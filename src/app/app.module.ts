@@ -3,6 +3,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './demo/service/auth.interceptor';
 
 @NgModule({
     declarations: [
@@ -13,7 +15,8 @@ import { AppLayoutModule } from './layout/app.layout.module';
         AppLayoutModule
     ],
     providers: [
-        { provide: LocationStrategy, useClass: HashLocationStrategy }
+        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     ],
     bootstrap: [AppComponent]
 })

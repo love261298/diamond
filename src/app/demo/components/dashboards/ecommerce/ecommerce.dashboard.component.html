@@ -63,7 +63,7 @@
 				<p-table [value]="products" [paginator]="true" [rows]="5" responsiveLayout="scroll">
 					<ng-template pTemplate="header">
 						<tr>
-							<th pSortableColumn="id" style="width:10%;min-width:6rem;">ID
+							<th pSortableColumn="id" style="width:10%;min-width:6rem;">Name
 								<p-sortIcon field="id"></p-sortIcon>
 							</th>
 							<th pSortableColumn="category" style="width:30%;min-width:10rem;">Category
@@ -82,7 +82,7 @@
 						<tr>
 							<td>
 								<span class="p-column-title">Id</span>
-								{{product.id}}</td>
+								{{product.name}}</td>
 							<td>
 								<span class="p-column-title">Category</span>
 								{{product.category}}</td>
