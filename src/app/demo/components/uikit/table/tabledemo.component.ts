@@ -1,3 +1,4 @@
+import { ProductAPIService } from 'src/app/demo/service/product-api.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Customer, Representative } from 'src/app/demo/api/customer';
 import { CustomerService } from 'src/app/demo/service/customer.service';
@@ -46,7 +47,7 @@ export class TableDemoComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
-    constructor(private customerService: CustomerService, private productService: ProductService) { }
+    constructor(private customerService: CustomerService, private productAPIService: ProductAPIService) { }
 
     ngOnInit() {
         this.customerService.getCustomersLarge().then(customers => {
@@ -56,9 +57,13 @@ export class TableDemoComponent implements OnInit {
             // @ts-ignore
             this.customers1.forEach(customer => customer.date = new Date(customer.date));
         });
+        this.productAPIService.get().subscribe({
+            next: data => {
+                this.products = data
+            }
+        })
         this.customerService.getCustomersMedium().then(customers => this.customers2 = customers);
         this.customerService.getCustomersLarge().then(customers => this.customers3 = customers);
-        this.productService.getProductsWithOrdersSmall().then(data => this.products = data);
 
         this.representatives = [
             { name: 'Amy Elsner', image: 'amyelsner.png' },
@@ -134,5 +139,5 @@ export class TableDemoComponent implements OnInit {
         table.clear();
         this.filter.nativeElement.value = '';
     }
-    
+
 }

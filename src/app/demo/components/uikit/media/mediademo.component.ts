@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { PhotoService } from 'src/app/demo/service/photo.service';
 import { Product } from 'src/app/demo/api/product';
+import { ProductAPIService } from 'src/app/demo/service/product-api.service';
 
 @Component({
     templateUrl: './mediademo.component.html'
@@ -49,10 +50,10 @@ export class MediaDemoComponent implements OnInit {
         }
     ];
 
-    constructor(private productService: ProductService, private photoService: PhotoService) { }
+    constructor(private productAPIService: ProductAPIService, private photoService: PhotoService) { }
 
     ngOnInit() {
-        this.productService.getProductsSmall().then(products => {
+        this.productAPIService.get().subscribe(products => {
             this.products = products;
         });
 

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Product } from 'src/app/demo/api/product';
+import { ProductAPIService } from 'src/app/demo/service/product-api.service';
 import { ProductService } from 'src/app/demo/service/product.service';
 
 @Component({
@@ -27,11 +28,10 @@ export class OverlaysDemoComponent implements OnInit {
 
     visibleSidebar5: boolean = false;
 
-    constructor(private productService: ProductService, private confirmationService: ConfirmationService, private messageService: MessageService) { }
+    constructor(private productAPIService: ProductAPIService, private confirmationService: ConfirmationService, private messageService: MessageService) { }
 
     ngOnInit() {
-        this.productService.getProductsSmall().then(products => this.products = products);
-
+        this.productAPIService.get().subscribe(products => this.products = products);
         this.images = [];
         this.images.push({
             source: 'assets/demo/images/sopranos/sopranos1.jpg',
