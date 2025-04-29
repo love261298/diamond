@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment.development';
 
@@ -9,7 +10,7 @@ import { environment } from 'src/app/environments/environment.development';
 export class AuthService {
   private readonly apiUrl = environment.apiUrl
 
-  constructor(private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient) { }
 
   login(body: { email: string, password: string }): Observable<any> {
     return this.http.post<any>(this.apiUrl + "login", body);
@@ -34,5 +35,6 @@ export class AuthService {
   }
   logout() {
     localStorage.clear();
+    this.router.navigate(['/auth/login'])
   }
 }
