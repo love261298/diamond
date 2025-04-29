@@ -1,18 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Blog } from 'src/app/demo/api/blog';
 
 @Component({
-    selector: 'app-blog-list-card',
-    templateUrl: './blog-list-card.component.html',
+  selector: 'app-blog-list-card',
+  templateUrl: './blog-list-card.component.html',
 })
-export class BlogListCardComponent {
+export class BlogListCardComponent implements OnInit {
 
-    @Input() blog!: Blog;
+  @Input() blog!: any;
 
-    constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
+  ngOnInit(): void {
+  }
 
-    navigateToDetail(): void {
-        this.router.navigateByUrl("/apps/blog/detail");
-    }
+  navigateToDetail(): void {
+    console.log(`/apps/blog/detail/${this.blog.id}`)
+    this.router.navigateByUrl(`/apps/blog/detail/${this.blog.id}`);
+  }
 }
