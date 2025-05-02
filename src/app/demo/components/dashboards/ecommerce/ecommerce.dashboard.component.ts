@@ -98,7 +98,6 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
     // });
     this.productAPIService.get().subscribe({
       next: (res) => {
-        console.log(res)
         this.products = res;
         this.productsThisWeek = res;
         this.productsLastWeek = [...res].reverse();

@@ -32,7 +32,6 @@ export class AppTopbarComponent {
   }
   logout() {
     this.authService.logout();
-    this.router.navigate(['/auth/login'])
   }
   get logo() {
     const logo =

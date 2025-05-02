@@ -33,7 +33,6 @@ export class LoginComponent implements OnInit {
     }
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        console.log(response.message);
         this.authService.setToken(response.token);
         this.authService.setRole(response.role);
         this.router.navigate(['/'])
