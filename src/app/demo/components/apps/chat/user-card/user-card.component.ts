@@ -4,23 +4,24 @@ import { User } from 'src/app/demo/api/user';
 import { ChatService } from '../service/chat.service';
 
 @Component({
-    selector: 'app-user-card',
-    templateUrl: './user-card.component.html'
+  selector: 'app-user-card',
+  templateUrl: './user-card.component.html'
 })
 export class UserCardComponent implements OnInit {
 
-    @Input() user!: User;
+  @Input() user!: any;
 
-    lastMessage!: Message;
+  lastMessage!: Message;
 
-    constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService) { }
+  getDateString(d: Date): any {
+    const date = new Date(d)
+    return date.toISOString().slice(0, 10);
+  }
+  ngOnInit(): void {
+  }
 
-    ngOnInit(): void {
-        let filtered = this.user.messages.filter(m => m.ownerId !== 123)
-        this.lastMessage = filtered[filtered.length - 1];
-    }
-
-    changeView(user: User) {
-        this.chatService.changeActiveChat(user);
-    }
+  changeView(user: User) {
+    this.chatService.changeActiveChat(user);
+  }
 }

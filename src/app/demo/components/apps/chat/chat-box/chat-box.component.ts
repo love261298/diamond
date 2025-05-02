@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Message } from 'src/app/demo/api/message';
+import { UserService } from './../../../../service/user.service';
+import { ChatService } from './../service/chat.service';
+import { Component, OnInit, Input, ChangeDetectionStrategy, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { User } from 'src/app/demo/api/user';
-import { ChatService } from '../service/chat.service';
 
 @Component({
     selector: 'app-chat-box',
@@ -10,10 +10,9 @@ import { ChatService } from '../service/chat.service';
 })
 export class ChatBoxComponent implements OnInit {
 
-    defaultUserId: number = 123;
-
-    message!: Message;
-
+    messages!: any;
+    myId!: string;
+    constructor(private chatService: ChatService, private userService: UserService, private cdr: ChangeDetectorRef) { }
     textContent: string = '';
 
     uploadedFiles: any[] = [];
@@ -25,34 +24,30 @@ export class ChatBoxComponent implements OnInit {
     ];
 
     @Input() user!: User;
-
-    constructor(private chatService: ChatService) { }
-
-    setMessage() {
-        if (this.user) {
-            let filteredMessages = this.user.messages.filter(m => m.ownerId !== this.defaultUserId);
-            this.message = filteredMessages[filteredMessages.length - 1];
-        }
-    }
+    @Input() chatId!: string;
 
     ngOnInit(): void {
-        this.setMessage();
+        this.userService.getMe().subscribe({
+            next: res => this.myId = res.id
+        })
     }
-
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['user'] && changes['user'].currentValue) {
+            this.messages = this.user.messages
+            console.log(this.user)
+        }
+    }
     sendMessage() {
         if (this.textContent == '' || this.textContent === ' ') {
             return;
         }
-        else {
-            let message = {
-                text: this.textContent,
-                ownerId: 123,
-                createdAt: new Date().getTime(),
+        this.chatService.sendMessage(this.textContent).subscribe({
+            next: res => {
+                this.messages.push(res)
+                this.cdr.markForCheck();                 // Bắt Angular check lại
+                this.textContent = '';
             }
-
-            this.chatService.sendMessage(message)
-            this.textContent = '';
-        }
+        })
     }
 
     onEmojiSelect(emoji: string) {

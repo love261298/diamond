@@ -14,6 +14,10 @@ export class UserService {
   get(): Observable<any> {
     return this.http.get<any>(this.apiUrl + "Users");
   }
+  
+  getMe(): Observable<any> {
+    return this.http.get<any>(this.apiUrl + "Users/me");
+  }
 
   creaet(user: any): Observable<any> {
     return this.http.post<any>(this.apiUrl + "Users", user);
