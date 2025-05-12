@@ -68,5 +68,5 @@
       label="Edit Post"></button>
   </div>
   <app-blog-comments [comments]="comments"></app-blog-comments>
-  <app-new-comment [blogId]="id"></app-new-comment>
+  <app-new-comment (commentSubmitted)="getBlog()" [blogId]="id"></app-new-comment>
 </div>

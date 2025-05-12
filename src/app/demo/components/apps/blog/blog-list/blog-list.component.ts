@@ -79,7 +79,10 @@ export class BlogListComponent implements OnInit {
     //   })
     // })
     this.blogService.get().subscribe({
-      next: res => this.totalBlogs = res
+      next: res => {
+        console.log(res)
+        this.totalBlogs = res
+      }
     })
   }
 

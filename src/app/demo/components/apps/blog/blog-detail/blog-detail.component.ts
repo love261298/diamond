@@ -13,14 +13,7 @@ export class BlogDetailComponent implements OnInit {
   comments: Comment[] = []
   constructor(private userService: UserService, private route: ActivatedRoute, private blogService: BlogService, private router: Router) { }
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id')?.trim().replace(/^\+/, '') || '';
-    this.blogService.getById(this.id!).subscribe({
-      next: res => {
-        this.blog = res;
-        this.comments = res.comment;
-      }
-    })
-
+    this.getBlog()
     // this.userService.get().subscribe({
     //     next: res => {
     //         console.log(res)
@@ -38,6 +31,15 @@ export class BlogDetailComponent implements OnInit {
 
     //     }
     // })
+  }
+  getBlog() {
+    this.id = this.route.snapshot.paramMap.get('id')?.trim().replace(/^\+/, '') || '';
+    this.blogService.getById(this.id!).subscribe({
+      next: res => {
+        this.blog = res;
+        this.comments = res.comment;
+      }
+    })
   }
   navigateToEdit() {
     this.router.navigateByUrl(`/apps/blog/edit/${this.id}`);

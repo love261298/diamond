@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommentService } from 'src/app/demo/service/comment.service';
 
 @Component({
@@ -6,6 +6,7 @@ import { CommentService } from 'src/app/demo/service/comment.service';
   templateUrl: './new-comment.component.html'
 })
 export class NewCommentComponent {
+  @Output() commentSubmitted = new EventEmitter<void>();
   constructor(private commentService: CommentService) { }
   description!: string
   @Input() blogId!: string;
@@ -16,7 +17,10 @@ export class NewCommentComponent {
       description: this.description
     }
     this.commentService.creaet(comment).subscribe({
-      next: res => console.log(res),
+      next: res => {
+        this.commentSubmitted.emit(); // 👉 thông báo cho component cha
+        this.description = '';
+      },
       error: err => console.log(err)
     })
   }
