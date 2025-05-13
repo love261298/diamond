@@ -10,6 +10,7 @@ import {
 import { ProductService } from 'src/app/demo/service/product.service';
 import { Table } from 'primeng/table';
 import { MenuItem } from 'primeng/api';
+import { UserService } from 'src/app/demo/service/user.service';
 
 @Component({
   templateUrl: './ecommerce.dashboard.component.html',
@@ -50,8 +51,7 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private layoutService: LayoutService,
     private productAPIService: ProductAPIService,
-    private productOrderService: ProductOrderService,
-    private productService: ProductService
+    private userService: UserService
   ) {
     this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
@@ -61,41 +61,12 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.productService.getProductsWithOrdersLarge().then(data => {
-    //   this.products = data;
-    //   data.map((p: any) => {
-    //     const product = {
-    //       name: p.name,
-    //       description: p.description,
-    //       image: p.image,
-    //       price: p.price,
-    //       category: p.category,
-    //       quantity: p.quantity,
-    //       inventoryStatus: p.inventoryStatus,
-    //       rating: p.rating
-    //     }
-    //     this.productAPIService.creaet(product).subscribe({
-    //       next: res => {
-    //         p.orders.map((e: any) => {
-    //           const order = {
-    //             productId: res.id,
-    //             amount: e.amount,
-    //             quantity: e.quantity,
-    //             customer: e.customer,
-    //             status: e.status
-    //           }
-    //           this.productOrderService.creaet(order).subscribe({
-    //             next: res => {
-    //             }
-    //           })
-    //         })
-    //       },
-    //       error: err => {
-    //         console.log(err)
-    //       }
-    //     })
-    //   })
-    // });
+    this.userService.get().subscribe({
+      next: res => {
+        this.teamMembers = res;
+        console.log(this.teamMembers)
+      }
+    })
     this.productAPIService.get().subscribe({
       next: (res) => {
         this.products = res;
@@ -173,35 +144,6 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
         ],
       },
     ];
-
-    this.teamMembers = [
-      {
-        name: 'Amy Elsner',
-        desc: 'Accounting',
-        image: 'amyelsner',
-      },
-      {
-        name: 'Anna Fali',
-        desc: 'Procurement',
-        image: 'annafali',
-      },
-      {
-        name: 'Bernardo Dominic',
-        desc: 'Finance',
-        image: 'bernardodominic',
-      },
-      {
-        name: 'Ivan Magalhaes',
-        desc: 'Sales',
-        image: 'ivanmagalhaes',
-      },
-      {
-        name: 'Xuxue Feng',
-        desc: 'Management',
-        image: 'xuxuefeng',
-      },
-    ];
-
     this.initCharts();
   }
 

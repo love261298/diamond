@@ -34,7 +34,6 @@ export class ChatBoxComponent implements OnInit {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['user'] && changes['user'].currentValue) {
             this.messages = this.user.messages
-            console.log(this.user)
         }
     }
     sendMessage() {
